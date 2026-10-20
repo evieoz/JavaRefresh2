@@ -1,140 +1,149 @@
-// Demo data array we will use in all examples
+
+// Demo Data Array
 const foods = ['Pizza', 'Tacos', 'Ice Cream', 'Burgers', 'Pasta']
 
-// helper function: will display whatever HTML/text we pass into the #out div
-function render (html) {
+// Helper Function
+function render(html) {
   document.getElementById('out').innerHTML = html
 }
 
-/* 
-  1) listFoods()
-     - Use a for...of loop
-     - Output all foods into the #out div (as <p> tags or list items)
-*/
-function listFoods () {
+// Function 1 - List Foods
+function listFoods() {
   let output = ''
-    for ( const food of foods){
-      output += `<p>${food}</p>`
-    }
-    
+
+  for (const food of foods) {
+    output += `<p>${food}</p>`
+  }
 
   render(output)
 }
 
-/* 
-  2) numberedFoods()
-     - Use a classic for loop with index
-     - Output foods as an ordered list (<ol><li>...</li></ol>)
-*/
-function numberedFoods () {
+// Function 2 - Numbered Foods
+function numberedFoods() {
   let output = `<ol class="list-group list-group-numbered">`
+
   for (let i = 0; i < foods.length; i++) {
     output += `<li class="list-group-item">${foods[i]}</li>`
   }
+
   output += '</ol>'
   render(output)
 }
 
-/* 
-  3) filterFoods()
-     - Prompt the user for a letter
-     - Loop through foods
-     - Only show foods that start with that letter
-     - If no matches, display a "not found" message
-*/
-function filterFoods () {                         
+// Function 3 - Filter Foods
+function filterFoods() {
   const letter = prompt('Enter a letter to filter foods:')
-  if(!letter) {
-    render(`<p class = "text-muted"> Please enter a letter!</p>`)
+
+  if (!letter || !letter.trim()) {
+    render(`<p class="text-muted">Please enter a letter!</p>`)
     return
   }
 
-  const lower = letter.toLowerCase()
-  const matches = foods.filter(food => food.toLowerCase().startsWith(lower))
+  const lower = letter.trim().toLowerCase()
+
+  const matches = foods.filter(food =>
+    food.toLowerCase().startsWith(lower)
+  )
 
   if (matches.length === 0) {
     render(`<p class="text-danger">No foods found starting with "${letter}"</p>`)
     return
   }
 
+  const list = matches
+    .map(item => `<li class="list-group-item">${item}</li>`)
+    .join('')
 
-  const list = matches.map(item => `<li class="list-group-item">${item}</li>`).join('')
   render(`<ul class="list-group">${list}</ul>`)
 }
 
-/* 
-  4) forEachFoods()
-     - Use foods.forEach()
-     - Output each food as a Bootstrap card
-     - Cards should be placed in a centered row
-*/
-function forEachFoods () {
+// Function 4 - Food Cards
+function forEachFoods() {
   let output = `<div class="row g-3 justify-content-center">`
+
   foods.forEach(food => {
-    output += `<div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
-      <div class="card shadow-sm w-100">
-        <div class="card-body text-center">
-          <h5 class="card-title mb-0">${food}</h5>
+    output += `
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
+        <div class="card shadow-sm w-100">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-0">${food}</h5>
+          </div>
         </div>
       </div>
-    </div>`
-  }
-  )
-  output += `</div>`
-  render(output)     
+    `
+  })
+
+  output += '</div>'
+  render(output)
 }
 
-// ---- Event listeners (buttons) ----
+// Original Event Listeners
 document.getElementById('btnList').addEventListener('click', listFoods)
 document.getElementById('btnNums').addEventListener('click', numberedFoods)
 document.getElementById('btnFilter').addEventListener('click', filterFoods)
 document.getElementById('btnForEach').addEventListener('click', forEachFoods)
 
-//  ---------------STUDENT WORK SECTION--------------
 
-/* 
-  Task 1 — Uppercase List
-  -----------------------
-  - Use .map() to create a new array with all foods in uppercase
-  - Display the results as an unordered list (<ul>)
-*/
-function uppercaseList () {
-  // TODO: Write your code here
+// ------------------------------------------
+// STUDENT WORK SECTION
+// ------------------------------------------
+
+// Task 1 - Uppercase List
+function uppercaseList() {
+  const upperFoods = foods.map(food => food.toUpperCase())
+
+  let output = '<ul class="list-group">'
+
+  upperFoods.forEach(food => {
+    output += `<li class="list-group-item">${food}</li>`
+  })
+
+  output += '</ul>'
+  render(output)
 }
 
-/* 
-  Task 2 — Reverse List
-  ---------------------
-  - Show the foods array in reverse order
-  - You may use a backwards loop OR the built-in .reverse()
-*/
-function reverseList () {
-  // TODO: Write your code here
+// Task 2 - Reverse List
+function reverseList() {
+  const reversed = [...foods].reverse()
+
+  let output = '<ul class="list-group">'
+
+  reversed.forEach(food => {
+    output += `<li class="list-group-item">${food}</li>`
+  })
+
+  output += '</ul>'
+  render(output)
 }
 
-/* 
-  Task 3 — Random Food Picker
-  ---------------------------
-  - Use Math.random to pick a random food from the array
-  - Display it in a Bootstrap card with a heading like "Today's Pick"
-*/
-function randomFoodPicker () {
-  // TODO: Write your code here
+// Task 3 - Random Food Picker
+function randomFoodPicker() {
+  const random = Math.floor(Math.random() * foods.length)
+  const food = foods[random]
+
+  render(`
+    <div class="card shadow-sm text-center">
+      <div class="card-body">
+        <h4>Today's Pick 🍕</h4>
+        <h2>${food}</h2>
+      </div>
+    </div>
+  `)
 }
 
-/* 
-  Task 4 — Word Lengths
-  ---------------------
-  - Loop through each food in the array
-  - Count the number of characters in each one
-  - Display results in the format: Food — X letters
-*/
-function wordLengths () {
-  // TODO: Write your code here
+// Task 4 - Word Lengths
+function wordLengths() {
+  let output = '<ul class="list-group">'
+
+  for (const food of foods) {
+    output += `<li class="list-group-item">${food} — ${food.length} letters</li>`
+  }
+
+  output += '</ul>'
+  render(output)
 }
 
-// ---- Event listeners for the new buttons ----
-// (Make sure to add matching buttons in index.html)
+// Student Challenge Event Listeners
 document.getElementById('btnUppercase').addEventListener('click', uppercaseList)
 document.getElementById('btnReverse').addEventListener('click', reverseList)
 document.getElementById('btnRandom').addEventListener('click', randomFoodPicker)
