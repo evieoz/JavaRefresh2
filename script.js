@@ -124,7 +124,7 @@ function randomFoodPicker() {
   render(`
     <div class="card shadow-sm text-center">
       <div class="card-body">
-        <h4>Today's Pick 🍕</h4>
+        <h4>Today's Pick </h4>
         <h2>${food}</h2>
       </div>
     </div>
